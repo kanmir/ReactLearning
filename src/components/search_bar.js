@@ -5,17 +5,25 @@ class SearchBar extends Component {
         super(props);
         this.state = { term: '' };
     }
-    onInputChange = (event) => {
-        this.setState({ term: event.target.value});
-    }
 
     render() {
         return (
-        <div>
-            <input value={this.state.term} onChange={ this.onInputChange } />
+        <div className="search-bar">
+            <input
+                value={this.state.term}
+                onChange={ event => this.onInputChange(event.target.value) } />
         </div>
         );
 
+    }
+
+    onInputChange(term) {
+        clearTimeout(this.state.timeoutId);
+        this.setState({term});
+        const timeoutId = setTimeout(() => {
+            this.props.onSearchTermChange(term);
+        }, 400);
+        this.setState({timeoutId});
     }
 }
 
